@@ -67,7 +67,6 @@ const sendOTP = async (res, type, email, username) => {
         const rs = await sendMail(data)
         currentDateTime = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
         await pool.query('INSERT INTO otp (otp, email, createAt) VALUES (?, ?, ?)', [otp, email, currentDateTime]);
-
         return res.status(200).json({ success: true, message: "Gửi mã OTP thành công !" })
 
 
