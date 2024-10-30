@@ -9,10 +9,9 @@ datasource db {
 
 model cart {
   id          Int           @id @default(autoincrement())
-  id_user     Int
+  id_user     Int           @unique(map: "unique_id_user")
   createAt    DateTime      @default(now()) @db.DateTime(0)
   updateAt    DateTime      @default(now()) @db.DateTime(0)
-  test        Int
   user        user          @relation(fields: [id_user], references: [id], onDelete: Cascade, map: "cart_user")
   cart_detail cart_detail[]
 
@@ -156,11 +155,11 @@ model user {
   avatar   String     @default("default.jpg") @db.VarChar(255)
   birthday DateTime?  @db.Date
   gender   Int?
-  isAdmin  Boolean    @default(false)
-  deleted  Boolean    @default(false)
+  isAdmin  Int        @default(0)
+  deleted  Int        @default(0)
   createAt DateTime   @default(now()) @db.DateTime(0)
   updateAt DateTime   @default(now()) @db.DateTime(0)
-  cart     cart[]
+  cart     cart?
   feedback feedback[]
   orders   orders[]
 }
