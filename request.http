@@ -11,6 +11,52 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
+    "email": "levantung14112002@gmail.com",
     "password": "123456"
+}
+
+//Send OTP
+###
+POST http://localhost:3000/api/auth/send_otp
+Content-Type: application/json
+
+{
+    "email": "levantung14112002@gmail.com",
+    "username": "Lê Văn Tùng"
+}
+
+
+//Send OTP
+###
+POST http://localhost:3000/api/auth/register_otp
+Content-Type: application/json
+
+{
+    "email": "levantung14112002@gmail.com",
+    "password": "123456",
+    "username": "Tùng Lê test",
+    "otp": "565803"
+}
+
+
+//Send OTP
+###
+POST http://localhost:3000/api/auth/register_otp
+Content-Type: application/json
+
+{
+    "email": "levantung14112002@gmail.com",
+    "password": "123456",
+    "username": "Tùng Lê test",
+    "otp": "565803"
+}
+
+
+//Send OTP
+###
+POST http://localhost:3000/api/auth/send_otp_forgot
+Content-Type: application/json
+
+{
+    "email": "levantung14112002@gmail.com"
 }
