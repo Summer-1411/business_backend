@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer')
 const asyncHandler = require('express-async-handler')
 
-const sendMail = asyncHandler(async ({ email, subject, html }) => {
+const sendUserEmail = asyncHandler(async ({ email, subject, html }) => {
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
@@ -26,7 +26,7 @@ let getBodyHTMLEmail = (dataSend) => {
     let result =
         `
         <h3>Xin chào ${dataSend.username}!</h3>
-        <p>Chúng tôi rất vui vì đã đăng ký tài khoản trên cửa hàng CoolFate Shop.</p>
+        <p>Chúng tôi rất vui vì đã đăng ký tài khoản trên cửa hàng Summer Shop.</p>
         <p>Sau đây là tin xác thực tài khoản của bạn để hoàn tất quá trình đăng ký</p>
         <p>Mã này sẽ hết hiệu lực trong vòng 15 phút.</p>
         <div>Xin chân thành cảm ơn!</div>
@@ -39,7 +39,7 @@ let getBodyHTMLForgotPassword = (dataSend) => {
     let result =
         `
         <h3>Xin chào ${dataSend.email}!</h3>
-        <p>Chúng tôi nhận được yêu cầu lấy lại mật khẩu của bạn trên cửa hàng CoolFate Shop.</p>
+        <p>Chúng tôi nhận được yêu cầu lấy lại mật khẩu của bạn trên cửa hàng Summer Shop.</p>
         <p>Nếu thực sự là bạn. Vui lòng nhập mã OTP để thực hiện quá trình lấy lại mật khẩu</p>
         <p>Mã này sẽ hết hiệu lực trong vòng 15 phút.</p>
         <div>Xin chân thành cảm ơn!</div>
@@ -52,7 +52,7 @@ let getBodyHTMLChangePassword = (dataSend) => {
     let result =
         `
         <h3>Xin chào ${dataSend.email}!</h3>
-        <p>Chúng tôi nhận được yêu cầu cập nhật mật khẩu của bạn trên cửa hàng CoolFate Shop.</p>
+        <p>Chúng tôi nhận được yêu cầu cập nhật mật khẩu của bạn trên cửa hàng Summer Shop.</p>
         <p>Nếu thực sự là bạn. Vui lòng nhập mã OTP để thực hiện quá trình cập nhật mật khẩu</p>
         <p>Mã này sẽ hết hiệu lực trong vòng 15 phút.</p>
         <div>Xin chân thành cảm ơn!</div>
@@ -88,7 +88,7 @@ let getBodyHTMLEmailCancelOrder = (dataSend) => {
 
 
 module.exports = {
-    sendMail,
+    sendUserEmail,
     getBodyHTMLEmail,
     getBodyHTMLEmailCancelOrder,
     getBodyHTMLForgotPassword,

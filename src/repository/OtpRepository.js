@@ -25,7 +25,7 @@ class OtpRepository {
     }
 
     //Xóa otp theo email khi đã đăng ký/đặt lại mật khẩu thành công
-    async deleteOtpByEmail(email) {
+    static async deleteOtpByEmail(email) {
         const result = await prisma.otp.deleteMany({
             where: { email: email },
         });
