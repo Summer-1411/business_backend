@@ -153,7 +153,73 @@ class AuthService {
             emailService.sendOTP(res, TYPE_SEND_OTP.CHANGE_PASSWORD, userExist[0].email)
         } catch (error) {
             console.log(error)
-            res.status(500).json({ success: false, message: 'Internal server error' })
+            res.status(500).json({ success: false, message: vi.serverError, error })
+        }
+    }
+
+    static async saveChangePass(req, res) {
+        const { newPassword, otp } = req.body
+        const idUser = req.user.id
+        if (!newPassword || !otp) {
+            return res
+                .status(400)
+                .json({ success: false, message: 'Vui lòng nhập đủ thông tin !' })
+        }
+        try {
+            const userExist = await userRepository.getUserById(idUser);
+            if (validationUtils.isNullOrEmpty(userExist)) {
+                return res
+                    .status(400)
+                    .json({ success: false, message: 'Tài khoản không tồn tại !' })
+            }
+            const valueOTP = await otpRepository.getLatestOtpRecord(otp);
+            if (validationUtils.isNullOrEmpty(valueOTP)) {
+                return res.status(500).json({ success: false, message: "Mã OTP không hợp lệ !" })
+            }
+            if (valueOTP?.email !== userExist.email) {
+                return res.status(400).json({ success: true, message: "Mã OTP không hợp lệ với email này !" })
+            }
+            let checkTimeExpires = validExpiresTime(valueOTP?.createAt)
+            if (checkTimeExpires) {
+                const hashedPassword = await verifyUtils.hashPassword(newPassword);
+                await userRepository.updatePasswordByEmail(valueOTP.email, hashedPassword);
+                await otpRepository.deleteOtpByEmail(valueOTP.email);
+                return res.status(200).json({ success: true, message: "Bạn đã đổi mật khẩu thành công" })
+            }
+            return res.status(400).json({ success: true, message: "Mã OTP đã hết hạn !" })
+        } catch (error) {
+            console.log('error', error);
+            return res.status(500).json({ success: false, message: vi.serverError, error })
+        }
+    }
+
+    static async forgotPassword(req, res) {
+        const { email, password, otp } = req.body
+        if (!email || !password || !otp) {
+            return res
+                .status(400)
+                .json({ success: false, message: 'Vui lòng nhập đủ thông tin !' })
+        }
+        try {
+            const valueOTP = await otpRepository.getOtpByOtpCode(otp);
+            if (validationUtils.isNullOrEmpty(valueOTP)) {
+                return res.status(500).json({ success: false, message: "Mã OTP không hợp lệ !" })
+            }
+            if (valueOTP?.email !== email) {
+                return res.status(400).json({ success: true, message: "Mã OTP không hợp lệ với email này !" })
+            }
+
+            let checkTimeExpires = validExpiresTime(valueOTP?.createAt)
+            if (checkTimeExpires) {
+                const hashedPassword = await verifyUtils.hashPassword(password)
+                await userRepository.updatePasswordByEmail(valueOTP.email, hashedPassword);
+                await otpRepository.deleteOtpByEmail(valueOTP.email);
+                return res.status(200).json({ success: true, message: "Bạn đã đổi mật khẩu thành công" })
+            }
+
+            return res.status(400).json({ success: true, message: "Mã OTP đã hết hạn !" })
+        } catch (error) {
+            return res.status(500).json({ success: false, message: vi.serverError, error })
         }
     }
 }

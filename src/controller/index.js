@@ -1,8 +1,14 @@
 const authController = require('./AuthController')
+const categoryController = require('./CategoryController')
+const producerController = require('./ProducerController')
+const productController = require('./ProductController')
 
 function initRoutes(app) {
     const routes = [
         { path: '/api/auth', route: authController },
+        { path: '/api/category', route: categoryController },
+        { path: '/api/producer', route: producerController },
+        { path: '/api/product', route: productController },
         // { path: '/api/user', route: require('./userRoute') },
         // { path: '/api/product', route: require('./productRoute') },
         // { path: '/api/product_detail', route: require('./productDetailRoute') },
