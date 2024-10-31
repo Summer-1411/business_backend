@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require("../prisma");
 
 class OtpRepository {
     // Tạo mới một OTP
@@ -23,6 +22,18 @@ class OtpRepository {
             where: { otp: otpCode },
         });
     }
+
+    static async getLatestOtpRecord(otp) {
+        return await prisma.otp.findFirst({
+            where: {
+                otp: otp,
+            },
+            orderBy: {
+                createAt: 'desc',
+            },
+        });
+    }
+
 
     //Xóa otp theo email khi đã đăng ký/đặt lại mật khẩu thành công
     static async deleteOtpByEmail(email) {

@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require("../prisma");
 
 class UserRepository {
     // Create a new user
@@ -44,6 +43,19 @@ class UserRepository {
             where: { id },
             data,
         });
+    }
+
+    //update by email
+    static async updatePasswordByEmail(email, password) {
+        return await prisma.user.update({
+            where: {
+                email: email,
+            },
+            data: {
+                password: password,
+                updateAt: new Date(),
+            },
+        })
     }
 
     // Delete (soft delete) user by ID

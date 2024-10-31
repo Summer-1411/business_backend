@@ -60,3 +60,10 @@ Content-Type: application/json
 {
     "email": "levantung14112002@gmail.com"
 }
+
+
+
+// GET all category
+###
+GET http://localhost:3000/api/category
+Content-Type: application/json
