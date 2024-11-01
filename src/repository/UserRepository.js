@@ -37,13 +37,6 @@ class UserRepository {
         });
     }
 
-    // Update user by ID
-    static async updateUser(id, data) {
-        return await prisma.user.update({
-            where: { id },
-            data,
-        });
-    }
 
     //update by email
     static async updatePasswordByEmail(email, password) {
@@ -66,6 +59,88 @@ class UserRepository {
         });
     }
 
+    ///////////////////////
+    static async getUserPages(deletedStatus) {
+        const count = await prisma.user.count({
+            where: { deleted: deletedStatus },
+        });
+        const numPages = Math.ceil(count / 5);
+        return { numPages };
+    }
+
+    static async countDeletedUsers() {
+        const numberDeleted = await prisma.user.count({
+            where: { deleted: 1 },
+        });
+        return { numberDeleted };
+    }
+
+    static async searchUsers(name) {
+        const users = await prisma.user.findMany({
+            where: {
+                username: {
+                    contains: name,
+                    mode: 'insensitive',
+                },
+                deleted: 0,
+            },
+        });
+        return users;
+    }
+
+    static async getAllUsersV2(id, page, deletedStatus) {
+        if (id) {
+            const user = await prisma.user.findUnique({
+                where: { id: id },
+            });
+            return user;
+        }
+
+        const limit = 5;
+        const offset = (page - 1) * limit;
+
+        const users = await prisma.user.findMany({
+            where: { deleted: deletedStatus, isAdmin: 0 },
+            orderBy: { createAt: 'desc' },
+            skip: offset,
+            take: limit,
+        });
+        return users;
+    }
+
+    static async updateUser(id, data) {
+        const updatedUser = await prisma.user.update({
+            where: { id: id },
+            data: {
+                ...data,
+                ...(data.birthday && { birthday: new Date(data.birthday) }), // chuyển đổi chuỗi ngày thành kiểu Date nếu cần
+                updateAt: new Date() // cập nhật trường `updateAt` với thời gian hiện tại
+            },
+        });
+        return updatedUser;
+    }
+
+    static async softDeleteUser(id) {
+        const updatedUser = await prisma.user.update({
+            where: { id: id },
+            data: {
+                deleted: 1,
+                updateAt: new Date() // cập nhật `updateAt` khi xóa
+            },
+        });
+        return updatedUser;
+    }
+
+    static async restoreUser(id) {
+        const updatedUser = await prisma.user.update({
+            where: { id: id },
+            data: {
+                deleted: 0,
+                updateAt: new Date() // cập nhật `updateAt` khi khôi phục
+            },
+        });
+        return updatedUser;
+    }
 }
 
 module.exports = UserRepository;
