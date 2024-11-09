@@ -137,7 +137,6 @@ class AuthService {
                 .json({ success: false, message: 'Vui lòng nhập đủ thông tin !' })
         }
         try {
-            // const [userExist] = await pool.query(`SELECT * FROM user WHERE id = ? AND deleted = ?`, [idUser, 0]);
             const userExist = await userRepository.getUserById(idUser);
             if (validationUtils.isNullOrEmpty(userExist)) {
                 return res
