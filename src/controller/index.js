@@ -9,19 +9,6 @@ function initRoutes(app) {
         { path: '/api/category', route: categoryController },
         { path: '/api/producer', route: producerController },
         { path: '/api/product', route: productController },
-        // { path: '/api/user', route: require('./userRoute') },
-        // { path: '/api/product', route: require('./productRoute') },
-        // { path: '/api/product_detail', route: require('./productDetailRoute') },
-        // { path: '/api/producer', route: require('./producerRoute') },
-        // { path: '/api/category', route: require('./categoryRoute') },
-        // { path: '/api/cart', route: require('./cartRoute') },
-        // { path: '/api/order', route: require('./orderRoute') },
-        // { path: '/api/order_detail', route: require('./orderDetailroute') },
-        // { path: '/api/stat', route: require('./statRoute') },
-        // { path: '/api/invoices', route: require('./invoiceRoute') },
-        // { path: '/api/feedback', route: require('./feedbackRoute') },
-        // { path: '/api/voucher', route: require('./voucherRoute') },
-        // { path: '/api/payment', route: require('./paymentRoute') }
     ];
 
     routes.forEach(({ path, route }) => {
